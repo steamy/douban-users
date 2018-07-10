@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  mysql:
+    build: ./mysql
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/conf.d:/etc/mysql/conf.d
+    environment:
+      - MYSQL_DATABASE=douban
+      - MYSQL_ROOT_PASSWORD=steam
+    ports:
+      - "3307:3306"
+  reids:
+    build: ./redis
+    volumes:
+      - ./redis/data:/data
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    container_name: spider-url-redis
+
+#
+#  site:
+#    build: ./web
+#    links:
+#      - mysql
+#    depends_on:
+#      - mysql
+#    volumes:
+#      - ./web:/site
+#    ports:
+#      - "8000:8000"
