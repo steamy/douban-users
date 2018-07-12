@@ -19,15 +19,14 @@ class DoubanUserSpider(scrapy.Spider):
 
         # 从Redis中读取用户名，拼接url
         r = redis.Redis(connection_pool=redisPool)
+        #除去userid_wanted中已经爬取的用户
+        r.sdiffstore('userid_wanted', 'userid_wanted', 'userid_used')
         user_ids = r.smembers('userid_wanted')
 
-        headers = {
-            'User-Agent': ":Mozilla/5.0(Macintosh;U;IntelMacOSX10_6_8;en-us)AppleWebKit/534.50(KHTML,likeGecko)Version/5.1Safari/534.50"
-        }
 
         for user_id in user_ids:
             url = base_url + user_id
-            yield scrapy.Request(url=url, headers=headers, callback=self.parse)
+            yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
         userLoader = UserLoader(item=UserspiderItem(), response=response)

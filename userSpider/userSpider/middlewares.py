@@ -6,6 +6,10 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
+from .settings import IP_POOL
+from scrapy.contrib.downloadermiddleware.httpproxy import HttpProxyMiddleware
+import random
 
 
 class UserspiderSpiderMiddleware(object):
@@ -101,3 +105,27 @@ class UserspiderDownloaderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+class MyUserAgentMiddleware(UserAgentMiddleware):
+    def __init__(self, user_agent):
+        self.user_agent = user_agent
+
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls(
+            user_agent=crawler.settings.get('MY_USER_AGENT')
+        )
+
+    def process_request(self, request, spider):
+        agent = random.choice(self.user_agent)
+        request.headers['User-Agent'] = agent
+        print('current agent:'+ agent)
+
+class MyHttpProxyMiddleware(HttpProxyMiddleware):
+    def __init__(self, ip=''):
+        self.ip = ip
+
+    def process_request(self, request, spider):
+        now_ip = random.choice(IP_POOL)
+        print('now_proxy_ip:' + now_ip["ipaddr"])
+        request.meta["proxy"] = "http://" + now_ip["ipaddr"]

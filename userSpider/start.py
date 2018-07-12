@@ -21,7 +21,9 @@ def initializeRedis():
     r=redis.Redis(connection_pool=redisPool)
     r.delete('userid_used', 'userid_wanted')
     #初始化userid_wanted
-    r.sadd('userid_wanted', '147681591', 'bedtimepoem', 'huangxiaoer', 'ArchiHY', '41745938')
+    r.sadd('userid_wanted', '147681591')
+    r.sadd('userid_used','404')
+    # 'bedtimepoem', 'huangxiaoer', 'ArchiHY', '41745938')
 
 if __name__ == '__main__':
     initializeRedis()

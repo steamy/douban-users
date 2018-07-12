@@ -14,6 +14,8 @@ def format_nickname(text):
     return text.replace('\n','')
 def format_checkin_time(text):
     return text.replace('加入','').strip()
+def format_books(text):
+    return text.replace('\n',' ')
 def format_movies(text):
     return text.replace('\n',' ')
 def format_group(text):
@@ -30,6 +32,9 @@ class UserLoader(ItemLoader):
     location_in = MapCompose(str.strip)
     signature_in = Identity()
     user_intro_out = Join('\n')
+
+    books_red_in = MapCompose(format_books)
+    books_wanted_in = MapCompose(format_books)
     books_wanted_out = Join(';')
     books_red_out = Join(';')
 
