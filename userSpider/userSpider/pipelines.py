@@ -35,7 +35,7 @@ class UserspiderPipeline(object):
         #将'userid_wanted'中的数据存入'userid_used'
         r.sunionstore('userid_used', 'userid_used', 'userid_wanted')
         #清除'userid_wanted'
-        r.delete('userid_wanted')
+        # r.delete('userid_wanted')
         #将该用户关注的人写入'userid_wanted'
         r.sadd('userid_wanted', *user_ids)
         #diff存储
