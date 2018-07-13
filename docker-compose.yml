@@ -1,16 +1,16 @@
 version: '2'
 
 services:
-#  mysql:
-#    build: ./mysql
-#    volumes:
-#      - ./mysql/data:/var/lib/mysql
-#      - ./mysql/conf.d:/etc/mysql/conf.d
-#    environment:
-#      - MYSQL_DATABASE=douban
-#      - MYSQL_ROOT_PASSWORD=steam
-#    ports:
-#      - "3307:3306"
+  mysql:
+    build: ./mysql
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/conf.d:/etc/mysql/conf.d
+    environment:
+      - MYSQL_DATABASE=douban
+      - MYSQL_ROOT_PASSWORD=steam
+    ports:
+      - "3307:3306"
   reids:
     build: ./redis
     volumes:
