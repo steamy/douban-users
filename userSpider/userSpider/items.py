@@ -6,15 +6,12 @@
 # https://doc.scrapy.org/en/latest/topics/items.html
 
 import scrapy
-from scrapy.loader.processors import Join, MapCompose, TakeFirst
 
 # def userid_
 
 
 class UserspiderItem(scrapy.Item):
-    user_id = scrapy.Field(
-
-    )
+    user_id = scrapy.Field()
     user_nickname = scrapy.Field()
     signature = scrapy.Field()
     location = scrapy.Field()
@@ -27,3 +24,9 @@ class UserspiderItem(scrapy.Item):
     groups = scrapy.Field()
     dou_list = scrapy.Field()
     follow_by = scrapy.Field()
+
+class ProxyIpSpiderItem(scrapy.Item):
+
+    data5u_ips = scrapy.Field()
+    xici_ips = scrapy.Field()
+    ip66_ips = scrapy.Field()

@@ -23,6 +23,9 @@ def format_group(text):
 def get_userid_from_followby(url):
     return url.split('/')[-2]
 
+def test(r):
+    print(r)
+
 class UserLoader(ItemLoader):
     default_output_processor = TakeFirst()
 

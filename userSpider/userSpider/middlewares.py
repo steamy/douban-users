@@ -7,10 +7,12 @@
 
 from scrapy import signals
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
-from .settings import IP_POOL
 from scrapy.contrib.downloadermiddleware.httpproxy import HttpProxyMiddleware
 import random
-
+from redis import Redis
+from .redis_pool import redisPool
+from scrapy import cmdline
+import datetime
 
 class UserspiderSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -91,6 +93,17 @@ class UserspiderDownloaderMiddleware(object):
         # - return a Response object
         # - return a Request object
         # - or raise IgnoreRequest
+        print("url!!!!!!!!")
+        print(request.url)
+        url = request.url
+        if url.find('sec') or url.find('sorry'):
+            proxy = request.meta.get('proxy', False)
+            print("proxy!!!!!!!!!!!!!:")
+            print(proxy)
+            r = Redis(connection_pool=redisPool)
+            r.srem('ip_pool', str(proxy))
+        else:
+            pass
         return response
 
     def process_exception(self, request, exception, spider):
@@ -126,6 +139,12 @@ class MyHttpProxyMiddleware(HttpProxyMiddleware):
         self.ip = ip
 
     def process_request(self, request, spider):
-        now_ip = random.choice(IP_POOL)
-        print('now_proxy_ip:' + now_ip["ipaddr"])
-        request.meta["proxy"] = "http://" + now_ip["ipaddr"]
+        r = Redis(connection_pool=redisPool)
+        url = r.srandmember('ip_pool',1)
+        request.meta['download_timeout'] = 10
+        request.meta['proxy'] = url[0]
+
+    def process_exception(self, request, exception, spider):
+        proxy = request.meta.get('proxy', False)
+        r = Redis(connection_pool=redisPool)
+        r.srem('ip_pool', str(proxy))

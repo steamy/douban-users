@@ -12,6 +12,18 @@ from ..loaders import UserLoader
 
 class DoubanUserSpider(scrapy.Spider):
     name = 'users'
+    custom_settings = {
+        'DOWNLOADER_MIDDLEWARES':{
+            'scrapy.downloadermiddleware.useragent.UserAgentMiddleware': None,
+            'userSpider.middlewares.MyUserAgentMiddleware': 400,
+            'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 123,
+            'userSpider.middlewares.MyHttpProxyMiddleware': 125,
+            'userSpider.middlewares.UserspiderDownloaderMiddleware': 543,
+        },
+        'ITEM_PIPELINES':{
+            'userSpider.pipelines.UserspiderPipeline': 300,
+        }
+    }
 
     def start_requests(self):
         base_url = 'https://www.douban.com/people/'
