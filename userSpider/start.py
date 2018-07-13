@@ -30,7 +30,7 @@ def initializeRedis():
 
 
 if __name__ == '__main__':
-    # initializeRedis()
+    initializeRedis()
     num = 1
     while True:
         start_ip_cmd = 'scrapy crawl proxy -s LOG_FILE=ip.'+str(num)+'log'
